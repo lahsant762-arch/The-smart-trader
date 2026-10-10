@@ -1,0 +1,20 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Banana Body -->
+    <path
+        android:fillColor="#FDD835"
+        android:pathData="M16,16 C20,24 24,40 40,48 C46,51 52,50 56,46 C48,52 38,50 30,44 C18,34 14,22 16,16 Z" />
+    <path
+        android:fillColor="#FFEE58"
+        android:pathData="M17,17 C21,25 26,38 38,45 C44,48 49,47 53,44 C46,48 38,46 31,41 C21,32 17,23 17,17 Z" />
+    <!-- Stem & Tip -->
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M16,16 L12,12 C11,11 13,10 14,11 L18,15 Z" />
+    <path
+        android:fillColor="#5D4037"
+        android:pathData="M56,46 L58,48 C59,49 57,51 55,50 L54,48 Z" />
+</vector>

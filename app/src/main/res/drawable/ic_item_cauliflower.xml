@@ -1,0 +1,35 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Outer green leaves -->
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M14,52 C10,38 16,26 24,20 C18,28 16,42 20,54 Z" />
+    <path
+        android:fillColor="#388E3C"
+        android:pathData="M50,52 C54,38 48,26 40,20 C46,28 48,42 44,54 Z" />
+    <path
+        android:fillColor="#43A047"
+        android:pathData="M18,52 C22,60 42,60 46,52 C38,58 26,58 18,52 Z" />
+    <!-- White / Cream Florets -->
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M32,16 C26,16 22,20 22,25 C18,25 15,29 16,34 C13,38 14,44 18,47 C19,51 25,54 30,52 C35,54 41,51 42,47 C46,44 47,38 44,34 C45,29 42,25 38,25 C38,20 34,16 32,16 Z" />
+    <path
+        android:fillColor="#CFD8DC"
+        android:pathData="M28,24 C26,24 24,26 24,29 C24,32 27,33 29,31 C31,29 31,24 28,24 Z" />
+    <path
+        android:fillColor="#CFD8DC"
+        android:pathData="M36,24 C34,24 33,26 33,29 C33,32 36,33 38,31 C40,29 39,24 36,24 Z" />
+    <path
+        android:fillColor="#B0BEC5"
+        android:pathData="M24,35 C22,35 20,38 22,41 C24,43 28,42 28,39 C28,36 26,35 24,35 Z" />
+    <path
+        android:fillColor="#B0BEC5"
+        android:pathData="M40,35 C38,35 36,38 38,41 C40,43 44,42 44,39 C44,36 42,35 40,35 Z" />
+    <path
+        android:fillColor="#CFD8DC"
+        android:pathData="M32,32 C29,32 28,36 30,39 C32,41 35,40 35,37 C35,34 34,32 32,32 Z" />
+</vector>

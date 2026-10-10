@@ -1,0 +1,6 @@
+{
+  "name": "التاجر الذكي",
+  "description": "تطبيق أندرويد متكامل يعمل دون إنترنت لإدارة المبيعات السريعة، السلع، المخزون، المصاريف، المداخيل، واستيراد وتصدير ملفات البيانات.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

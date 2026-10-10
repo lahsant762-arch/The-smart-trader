@@ -1,0 +1,20 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Fig Body (Teardrop) -->
+    <path
+        android:fillColor="#4A148C"
+        android:pathData="M32,16 C26,20 16,30 16,42 C16,52 23,58 32,58 C41,58 48,52 48,42 C48,30 38,20 32,16 Z" />
+    <path
+        android:fillColor="#7B1FA2"
+        android:pathData="M32,22 C28,26 20,34 20,44 C20,52 25,56 32,56 C39,56 44,52 44,44 C44,34 36,26 32,22 Z" />
+    <!-- Highlight & Stem -->
+    <path
+        android:fillColor="#CE93D8"
+        android:pathData="M24,36 C22,40 22,46 24,50 C23,46 23,40 27,36 Z" />
+    <path
+        android:fillColor="#43A047"
+        android:pathData="M32,16 C31,10 33,6 35,4 C34,8 33,12 32,16 Z" />
+</vector>

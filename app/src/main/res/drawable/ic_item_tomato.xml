@@ -1,0 +1,21 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Tomato Body -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M32,18 C18,18 10,28 10,40 C10,52 20,58 32,58 C44,58 54,52 54,40 C54,28 46,18 32,18 Z" />
+    <!-- Tomato Highlight -->
+    <path
+        android:fillColor="#FFCDD2"
+        android:pathData="M22,26 C18,30 16,36 17,42 C18,36 21,30 26,26 Z" />
+    <!-- Calyx & Stem -->
+    <path
+        android:fillColor="#43A047"
+        android:pathData="M32,8 C31,12 30,16 32,18 C34,16 33,12 32,8 Z" />
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M32,18 L24,14 L28,19 L18,22 L27,24 L28,29 L32,22 L36,29 L37,24 L46,22 L36,19 L40,14 Z" />
+</vector>

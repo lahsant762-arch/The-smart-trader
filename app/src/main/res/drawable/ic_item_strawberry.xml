@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Strawberry Body -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M32,58 C22,50 14,38 16,24 C18,18 28,16 32,18 C36,16 46,18 48,24 C50,38 42,50 32,58 Z" />
+    <!-- Calyx & Leaves -->
+    <path
+        android:fillColor="#43A047"
+        android:pathData="M32,16 L24,10 L28,16 L18,17 L26,20 L32,17 L38,20 L46,17 L36,16 L40,10 Z" />
+    <path
+        android:fillColor="#2E7D32"
+        android:pathData="M32,16 C31,11 33,6 35,4 C34,8 33,12 32,16 Z" />
+    <!-- Seeds -->
+    <path android:fillColor="#FFEE58" android:pathData="M24,26 A1.5,1.5 0 1 0 27,26 A1.5,1.5 0 1 0 24,26 Z" />
+    <path android:fillColor="#FFEE58" android:pathData="M37,26 A1.5,1.5 0 1 0 40,26 A1.5,1.5 0 1 0 37,26 Z" />
+    <path android:fillColor="#FFEE58" android:pathData="M31,32 A1.5,1.5 0 1 0 34,32 A1.5,1.5 0 1 0 31,32 Z" />
+    <path android:fillColor="#FFEE58" android:pathData="M22,38 A1.5,1.5 0 1 0 25,38 A1.5,1.5 0 1 0 22,38 Z" />
+    <path android:fillColor="#FFEE58" android:pathData="M40,38 A1.5,1.5 0 1 0 43,38 A1.5,1.5 0 1 0 40,38 Z" />
+    <path android:fillColor="#FFEE58" android:pathData="M30,44 A1.5,1.5 0 1 0 33,44 A1.5,1.5 0 1 0 30,44 Z" />
+</vector>

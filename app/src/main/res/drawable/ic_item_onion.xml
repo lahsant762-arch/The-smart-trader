@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Onion Bulb -->
+    <path
+        android:fillColor="#8E24AA"
+        android:pathData="M32,14 C16,22 12,36 14,48 C16,56 24,60 32,60 C40,60 48,56 50,48 C52,36 48,22 32,14 Z" />
+    <!-- Inner Layers & Striations -->
+    <path
+        android:fillColor="#AB47BC"
+        android:pathData="M32,18 C22,25 20,38 22,48 C24,53 28,56 32,56 C36,56 40,53 42,48 C44,38 42,25 32,18 Z" />
+    <path
+        android:fillColor="#E1BEE7"
+        android:pathData="M32,24 C28,29 27,38 28,46 C29,50 31,52 32,52 C33,52 35,50 36,46 C37,38 36,29 32,24 Z" />
+    <!-- Sprouts / Stem -->
+    <path
+        android:fillColor="#43A047"
+        android:pathData="M32,14 C30,8 34,4 36,2 C34,6 33,10 32,14 Z" />
+    <path
+        android:fillColor="#66BB6A"
+        android:pathData="M32,14 C28,9 26,6 24,4 C27,8 29,11 32,14 Z" />
+</vector>

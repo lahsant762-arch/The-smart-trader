@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+    <!-- Prickly Pear Oval Body -->
+    <path
+        android:fillColor="#F57C00"
+        android:pathData="M32,14 C22,14 18,24 18,40 C18,54 24,60 32,60 C40,60 46,54 46,40 C46,24 42,14 32,14 Z" />
+    <path
+        android:fillColor="#FFB74D"
+        android:pathData="M32,18 C26,18 22,26 22,40 C22,50 26,56 32,56 C38,56 42,50 42,40 C42,26 38,18 32,18 Z" />
+    <!-- Crown -->
+    <path
+        android:fillColor="#689F38"
+        android:pathData="M32,14 L28,8 L32,11 L36,8 L32,14 Z" />
+    <!-- Spines / Dots -->
+    <path android:fillColor="#E65100" android:pathData="M26,24 A1.5,1.5 0 1 0 29,24 A1.5,1.5 0 1 0 26,24 Z" />
+    <path android:fillColor="#E65100" android:pathData="M35,26 A1.5,1.5 0 1 0 38,26 A1.5,1.5 0 1 0 35,26 Z" />
+    <path android:fillColor="#E65100" android:pathData="M24,34 A1.5,1.5 0 1 0 27,34 A1.5,1.5 0 1 0 24,34 Z" />
+    <path android:fillColor="#E65100" android:pathData="M38,36 A1.5,1.5 0 1 0 41,36 A1.5,1.5 0 1 0 38,36 Z" />
+    <path android:fillColor="#E65100" android:pathData="M30,42 A1.5,1.5 0 1 0 33,42 A1.5,1.5 0 1 0 30,42 Z" />
+    <path android:fillColor="#E65100" android:pathData="M26,48 A1.5,1.5 0 1 0 29,48 A1.5,1.5 0 1 0 26,48 Z" />
+    <path android:fillColor="#E65100" android:pathData="M36,50 A1.5,1.5 0 1 0 39,50 A1.5,1.5 0 1 0 36,50 Z" />
+</vector>
