@@ -1,0 +1,62 @@
+{
+  "entities": {
+    "UserProfile": {
+      "collection": "users",
+      "fields": {
+        "displayName": { "type": "string", "optional": true },
+        "email": { "type": "string", "optional": true },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    },
+    "Product": {
+      "collection": "users/{userId}/products",
+      "fields": {
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "barcode": { "type": "string", "optional": true },
+        "costPrice": { "type": "number" },
+        "salePrice": { "type": "number" },
+        "stockQuantity": { "type": "number" },
+        "unit": { "type": "string" },
+        "iconKey": { "type": "string", "optional": true },
+        "minStockAlert": { "type": "number", "optional": true },
+        "updatedAt": { "type": "timestamp", "optional": true }
+      }
+    },
+    "Sale": {
+      "collection": "users/{userId}/sales",
+      "fields": {
+        "invoiceNumber": { "type": "string" },
+        "subtotalAmount": { "type": "number" },
+        "discountAmount": { "type": "number", "optional": true },
+        "totalAmount": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "changeAmount": { "type": "number", "optional": true },
+        "customerName": { "type": "string", "optional": true },
+        "paymentMethod": { "type": "string", "optional": true },
+        "timestamp": { "type": "timestamp" }
+      }
+    },
+    "Expense": {
+      "collection": "users/{userId}/expenses",
+      "fields": {
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "amount": { "type": "number" },
+        "notes": { "type": "string", "optional": true },
+        "timestamp": { "type": "timestamp" }
+      }
+    },
+    "Income": {
+      "collection": "users/{userId}/incomes",
+      "fields": {
+        "source": { "type": "string" },
+        "category": { "type": "string" },
+        "amount": { "type": "number" },
+        "notes": { "type": "string", "optional": true },
+        "timestamp": { "type": "timestamp" }
+      }
+    }
+  }
+}

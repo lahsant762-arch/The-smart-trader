@@ -1,6 +1,8 @@
 package com.example.ui.viewmodel
 
 import android.app.Application
+import android.content.Context
+import androidx.credentials.CredentialManager
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.local.AppDatabase
@@ -9,25 +11,61 @@ import com.example.data.local.entity.ProductEntity
 import com.example.data.local.entity.SaleEntity
 import com.example.data.model.CartItem
 import com.example.data.model.ReceiptData
+import com.example.data.remote.FirestoreSyncRepository
 import com.example.data.repository.MerchantRepository
 import com.example.data.util.CsvExporter
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.auth
+import com.example.data.remote.FirebaseAiRepository
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+
+sealed interface AiUiState {
+    data object Idle : AiUiState
+    data object Loading : AiUiState
+    data class Streaming(val text: String) : AiUiState
+    data class Success(val text: String) : AiUiState
+    data class Error(val message: String) : AiUiState
+}
 
 class MerchantViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: MerchantRepository
+    val syncRepo: FirestoreSyncRepository = FirestoreSyncRepository(application)
+    val aiRepo: FirebaseAiRepository = FirebaseAiRepository()
+
+    // AI States
+    private val _storeAnalysisState = MutableStateFlow<AiUiState>(AiUiState.Idle)
+    val storeAnalysisState: StateFlow<AiUiState> = _storeAnalysisState.asStateFlow()
+
+    private val _marketingState = MutableStateFlow<AiUiState>(AiUiState.Idle)
+    val marketingState: StateFlow<AiUiState> = _marketingState.asStateFlow()
+
+    private val _chatState = MutableStateFlow<AiUiState>(AiUiState.Idle)
+    val chatState: StateFlow<AiUiState> = _chatState.asStateFlow()
+
+    private val _currentUser = MutableStateFlow<FirebaseUser?>(Firebase.auth.currentUser)
+    val currentUser: StateFlow<FirebaseUser?> = _currentUser.asStateFlow()
 
     init {
         val db = AppDatabase.getDatabase(application)
         repository = MerchantRepository(db)
         viewModelScope.launch {
             repository.seedInitialProductsIfEmpty()
+        }
+
+        Firebase.auth.addAuthStateListener { auth ->
+            _currentUser.value = auth.currentUser
         }
     }
 
@@ -192,4 +230,137 @@ class MerchantViewModel(application: Application) : AndroidViewModel(application
             onFinished(count)
         }
     }
+
+    // Firebase Auth & Cloud Sync
+    fun signInWithGoogle(
+        context: Context,
+        credentialManager: CredentialManager,
+        scope: CoroutineScope,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        syncRepo.signInWithGoogle(context, credentialManager, scope, onSuccess, onError)
+    }
+
+    fun signOut(
+        credentialManager: CredentialManager,
+        scope: CoroutineScope,
+        onComplete: () -> Unit
+    ) {
+        syncRepo.signOut(credentialManager, scope, onComplete)
+    }
+
+    fun syncAllToCloud(onComplete: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            val res = syncRepo.backupLocalDataToCloud(
+                products = products.value,
+                sales = sales.value,
+                expenses = repository.allExpenses.firstOrNull() ?: emptyList(),
+                incomes = repository.allIncomes.firstOrNull() ?: emptyList()
+            )
+            res.fold(
+                onSuccess = { msg -> onComplete(true, msg) },
+                onFailure = { err -> onComplete(false, err.localizedMessage ?: "فشل المزامنة") }
+            )
+        }
+    }
+
+    // --- FIREBASE AI LOGIC (GEMINI 3.8 FLASH) INFERENCE ---
+
+    fun runStoreAnalysis() {
+        viewModelScope.launch {
+            _storeAnalysisState.value = AiUiState.Loading
+            val accumulated = StringBuilder()
+            try {
+                aiRepo.analyzeStorePerformanceStream(
+                    products = products.value,
+                    sales = sales.value,
+                    transactions = transactions.value
+                ).collect { chunk ->
+                    accumulated.append(chunk)
+                    _storeAnalysisState.value = AiUiState.Streaming(accumulated.toString())
+                }
+                _storeAnalysisState.value = AiUiState.Success(accumulated.toString())
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: TimeoutCancellationException) {
+                _storeAnalysisState.value = AiUiState.Error("انتهت مهلة استجابة Gemini. يرجى التحقق من اتصال الإنترنت والمحاولة ثانية.")
+            } catch (e: Exception) {
+                _storeAnalysisState.value = AiUiState.Error("خطأ في الاتصال بالذكاء الاصطناعي: ${e.localizedMessage ?: e.message}")
+            }
+        }
+    }
+
+    fun generateMarketingOffer(
+        productName: String,
+        price: Double,
+        discountPercent: Int,
+        category: String
+    ) {
+        viewModelScope.launch {
+            _marketingState.value = AiUiState.Loading
+            val accumulated = StringBuilder()
+            try {
+                aiRepo.generateMarketingOfferStream(
+                    productName = productName,
+                    price = price,
+                    discountPercent = discountPercent,
+                    category = category
+                ).collect { chunk ->
+                    accumulated.append(chunk)
+                    _marketingState.value = AiUiState.Streaming(accumulated.toString())
+                }
+                _marketingState.value = AiUiState.Success(accumulated.toString())
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: TimeoutCancellationException) {
+                _marketingState.value = AiUiState.Error("انتهت المهلة. يرجى إعادة المحاولة.")
+            } catch (e: Exception) {
+                _marketingState.value = AiUiState.Error("فشل توليد العرض: ${e.localizedMessage ?: e.message}")
+            }
+        }
+    }
+
+    fun askMerchantAssistant(question: String) {
+        if (question.isBlank()) return
+        viewModelScope.launch {
+            _chatState.value = AiUiState.Loading
+            val storeContext = "المحل يحتوي على ${products.value.size} سلعة بإجمالي ${sales.value.size} فاتورة بيع."
+            val accumulated = StringBuilder()
+            try {
+                aiRepo.askGeminiStream(question, storeContext).collect { chunk ->
+                    accumulated.append(chunk)
+                    _chatState.value = AiUiState.Streaming(accumulated.toString())
+                }
+                _chatState.value = AiUiState.Success(accumulated.toString())
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: TimeoutCancellationException) {
+                _chatState.value = AiUiState.Error("انتهت مهلة الإجابة. يرجى إعادة المحاولة.")
+            } catch (e: Exception) {
+                _chatState.value = AiUiState.Error("حدث خطأ: ${e.localizedMessage ?: e.message}")
+            }
+        }
+    }
+
+    fun resetAiChat() {
+        _chatState.value = AiUiState.Idle
+    }
+
+    // --- JSON & RTDB DATA IMPORT ---
+
+    fun importRtdbExportData(onFinished: (Int) -> Unit) {
+        viewModelScope.launch {
+            val count = repository.importRtdbDataset()
+            onFinished(count)
+        }
+    }
+
+    fun importProductsFromJson(jsonText: String, onFinished: (Int) -> Unit) {
+        viewModelScope.launch {
+            val count = repository.importProductsFromJson(jsonText)
+            onFinished(count)
+        }
+    }
 }
+

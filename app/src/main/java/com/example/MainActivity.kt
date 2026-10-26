@@ -47,24 +47,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.ui.screens.AiAdvisorScreen
 import com.example.ui.screens.CashflowScreen
 import com.example.ui.screens.InventoryScreen
 import com.example.ui.screens.PosScreen
 import com.example.ui.screens.ReportsAndFilesScreen
 import com.example.ui.theme.MyApplicationTheme
 import com.example.ui.viewmodel.MerchantViewModel
+import com.example.util.configureAppCheck
 
 enum class MainTab(val title: String, val icon: ImageVector) {
     POS("نقطة البيع", Icons.Default.PointOfSale),
     INVENTORY("السلع والمخزون", Icons.Default.Inventory2),
-    CASHFLOW("المصاريف والمدخول", Icons.Default.AccountBalanceWallet),
-    REPORTS("التقارير والملفات", Icons.Default.Assessment)
+    CASHFLOW("المصاريف", Icons.Default.AccountBalanceWallet),
+    AI_ADVISOR("المستشار الذكي", Icons.Default.AutoAwesome),
+    REPORTS("التقارير", Icons.Default.Assessment)
 }
 
 class MainActivity : ComponentActivity() {
@@ -74,6 +78,8 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Configure Firebase App Check before UI or ViewModels operations
+        configureAppCheck(this, intent)
         enableEdgeToEdge()
 
         setContent {
@@ -128,25 +134,31 @@ class MainActivity : ComponentActivity() {
                                     }
                                 },
                                 actions = {
-                                    // Offline Indicator Badge
+                                    val currentUser by viewModel.currentUser.collectAsStateWithLifecycle()
+                                    // Mode Indicator Badge (Cloud or Offline)
                                     Box(
                                         modifier = Modifier
                                             .padding(end = 12.dp)
                                             .clip(RoundedCornerShape(8.dp))
-                                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                                            .background(
+                                                if (currentUser != null)
+                                                    MaterialTheme.colorScheme.primaryContainer
+                                                else
+                                                    MaterialTheme.colorScheme.surfaceVariant
+                                            )
                                             .padding(horizontal = 8.dp, vertical = 4.dp),
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Row(verticalAlignment = Alignment.CenterVertically) {
                                             Icon(
-                                                imageVector = Icons.Default.WifiOff,
+                                                imageVector = if (currentUser != null) Icons.Default.Assessment else Icons.Default.WifiOff,
                                                 contentDescription = null,
                                                 tint = MaterialTheme.colorScheme.primary,
                                                 modifier = Modifier.size(14.dp)
                                             )
                                             Spacer(modifier = Modifier.width(4.dp))
                                             Text(
-                                                text = "محلي 100%",
+                                                text = if (currentUser != null) "سحابي + محلي" else "محلي 100%",
                                                 fontSize = 10.sp,
                                                 fontWeight = FontWeight.Bold,
                                                 color = MaterialTheme.colorScheme.primary
@@ -209,6 +221,7 @@ class MainActivity : ComponentActivity() {
                                 MainTab.POS -> PosScreen(viewModel = viewModel)
                                 MainTab.INVENTORY -> InventoryScreen(viewModel = viewModel)
                                 MainTab.CASHFLOW -> CashflowScreen(viewModel = viewModel)
+                                MainTab.AI_ADVISOR -> AiAdvisorScreen(viewModel = viewModel)
                                 MainTab.REPORTS -> ReportsAndFilesScreen(viewModel = viewModel)
                             }
                         }
